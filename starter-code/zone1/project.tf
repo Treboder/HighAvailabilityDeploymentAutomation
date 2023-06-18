@@ -1,13 +1,14 @@
 resource "kubernetes_namespace" "udacity" {
    metadata {
      name = local.name
+#     name = "monitoring"
    }
    depends_on = [
      module.project_eks
    ]
  }
 
-  resource "kubernetes_service" "grafana-external" {
+resource "kubernetes_service" "grafana-external" {
   metadata {
     name      = "grafana-external"
     namespace = "monitoring"
