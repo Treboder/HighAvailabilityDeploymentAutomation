@@ -5,6 +5,11 @@ You will then use the servers you deployed to create an SLO/SLI dashboard.
 Next, you will modify existing infrastructure templates and deploy a highly-available infrastructure to AWS in multiple zones using Terrafrom. 
 With this you will also deploy a RDS database cluster that has a replica in the alternate zone.
 
+## Guides
+
+- [SLI/SLO article](https://thenewstack.io/sre-fundamentals-differences-between-sli-vs-slo-vs-sla/#:~:text=SLI%20(service-level%20indicators)%3A,and%20performing%20up%20to%20standard)
+- [AWS DR strategies](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/)
+
 ## Getting Started
 
 Clone the appropriate git repo with the starter code. 
