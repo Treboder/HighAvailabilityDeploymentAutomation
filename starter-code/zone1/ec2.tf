@@ -9,7 +9,6 @@
    vpc_id             = module.vpc.vpc_id
  }
 
-
   #  ami-name = s3-udacity-ami
   #  ami-id = ami-00fe1f89c2f77f144 (us-east-1)
   #  ami-id = ami-010022d43ad0f0452 (us-east-2)

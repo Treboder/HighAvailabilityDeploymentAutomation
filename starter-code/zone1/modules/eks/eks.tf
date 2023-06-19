@@ -51,6 +51,11 @@ resource "aws_eks_cluster" "cluster" {
      min_size     = var.nodes_min_size
    }
 
+   # optional
+   ami_type       = "AL2_x86_64"
+   capacity_type  = "ON_DEMAND"
+   disk_size      = 20
+
    # Ensure that IAM Role permissions are created before and deleted after EKS Node Group handling.
    # Otherwise, EKS will not be able to properly delete EC2 Instances and Elastic Network Interfaces.
    depends_on = [

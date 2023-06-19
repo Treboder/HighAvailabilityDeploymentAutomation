@@ -1,7 +1,6 @@
 resource "kubernetes_namespace" "udacity" {
    metadata {
-     name = local.name
-#     name = "monitoring"
+     name = local.name # "monitoring"
    }
    depends_on = [
      module.project_eks
