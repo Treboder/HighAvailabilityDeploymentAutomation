@@ -134,37 +134,45 @@ Running it again AND performing the step below (No. 8) should clear up those err
 
 #### 9. Config Prometheus with IP from Ubuntu-Web EC2 instance
 
-- **Copy the public IP address of your Ubuntu-Web EC2 instance.** 
-Login to the AWS console and copy the public IP address of your Ubuntu-Web EC2 instance. 
+**9.1. Copy the public IP address of your Ubuntu-Web EC2 instance.** 
+- Login to the AWS console and copy the public IP address of your Ubuntu-Web EC2 instance. 
 - Ensure you are in the us-east-2 region.
 
-- **Set public IP of your Ubuntu Web for Prometheus.**
-Edit the `prometheus-additional.yaml` file and replace the `<public_ip>` entries with the public IP of your Ubuntu Web. Save the file.
+**9.2. Set public IP of your Ubuntu Web for Prometheus.**
+- Edit the `prometheus-additional.yaml` file and replace the `<public_ip>` entries with the public IP of your Ubuntu Web. Save the file.
 
-#### 10. Transfer `prometheus-additional.yaml` to Cloudshell (via Git)
+**Optional: Transfer `prometheus-additional.yaml` to Cloudshell via Git (in case you want to install Prometheus and Grafana from Cloudshell)**
 - git commit (locally, after setting the IP in the previous step)
 - git push origin master (updates the prometheus-additional.yaml file with actual IP)
 - git pull (from cloudshell, in order to run commands from there with updated IP)
 
-#### 11. Install Prometheus and Grafana (via Cloudshell)
-Change directories to your project directory `cd ../..` and run:
+#### 10. Install Prometheus and Grafana (on EKS)
+**Install via Helm**
+- Change directories to your project directory `cd ../..` and run:
 - `kubectl create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --namespace monitoring`
 - `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
 - `helm install prometheus prometheus-community/kube-prometheus-stack -f "values.yaml" --namespace monitoring`
+  - if helm install above doenst work out, try helm install without values.yaml below
+  - `helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring`
 
-<!-- `helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring` -->
+#### 11. Access Prometheus and Grafana
+**Via Port forwarding**
+- `kubectl -n monitoring  port-forward svc/prometheus-grafana  8888:80`
+- `kubectl -n monitoring  port-forward svc/prometheus-kube-prometheus-prometheus 8889:9090`
+- Point your local web browser to http://localhost:8888 for Grafana access and http://localhost:8889 for Prometheus access -->
 
-<!-- 10. Port forward
-`kubectl -n monitoring  port-forward svc/prometheus-grafana  8888:80`
-`kubectl -n monitoring  port-forward svc/prometheus-kube-prometheus-prometheus 8889:9090` -->
+**Via Load Balancer**
+- Get the DNS of your load balancer provisioned to access Grafana. 
+- You can find this by opening your AWS console and going to EC2 -> Load Balancers and selecting the load balancer provisioned. 
+- The DNS name of it will be listed below that you can copy and paste into your browser. 
+- Type that into your web browser to access Grafana.
 
-<!-- Point your local web browser to http://localhost:8888 for Grafana access and http://localhost:8889 for Prometheus access -->
+**Login**
+- Login to Grafana with `admin` for the username and `prom-operator` for the password.
 
-Get the DNS of your load balancer provisioned to access Grafana. You can find this by opening your AWS console and going to EC2 -> Load Balancers and selecting the load balancer provisioned. The DNS name of it will be listed below that you can copy and paste into your browser. Type that into your web browser to access Grafana.
-
-Login to Grafana with `admin` for the username and `prom-operator` for the password.
-
-#### 12. Install Postman from [here](https://www.postman.com/downloads/). See additional instructions for [importing the collection, and enviroment files](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data)
+#### 12. Postman 
+- Install Postman from [here](https://www.postman.com/downloads/). 
+- See additional instructions for [importing the collection, and enviroment files](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data)
 
 #### 13. Setup Postman (for interacting with web api) 
 Open Postman and load the files `SRE-Project-postman-collection.json` and `SRE-Project.postman_environment.json`
@@ -177,8 +185,7 @@ Open Postman and load the files `SRE-Project-postman-collection.json` and `SRE-P
 
 4. Run `Get all events` for 100 iterations by clicking the top level `SRE Project` folder in the left-hand side and select just `Get All Events` and click the Run icon in the toolbar.
 
-   <!-- 2. Run the Postman runners to generate some traffic. Use 100 iterations -->
-
+5. Optional: Run the Postman runners to generate some traffic. Use 100 iterations
 
 
 ## Project Instructions
