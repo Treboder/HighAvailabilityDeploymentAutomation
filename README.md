@@ -23,11 +23,14 @@ This is where you will run the code from in your AWS Cloudshell terminal.
 
 ### Installation
 
-#### 1. AWS setup remote 
+#### 1. AWS setup 
+**remote**
+
 Open your AWS console and ensure it is set for region `us-east-1`. 
 Open the CloudShell by clicking the little shell icon in the toolbar at the top near the search box. 
 
-#### 1. AWS setup locally
+**locally**
+
 Set up your aws credentials from Udacity AWS Gateway locally
 - https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-files.html
 - Set your region to `us-east-1` 
@@ -52,22 +55,23 @@ aws ec2 copy-image --source-image-id <your-ami-id-from-above> --source-region us
 
 #### 3. Create S3 buckets for zone 1 (us-east-2) 
 Close your CloudShell. Change your region to `us-east-2`. 
-From the AWS console create an S3 bucket in `us-east-2` called `udacity-tf-<your_name>` e.g `udacity-tf-tscotto`
+From the AWS console create an S3 bucket in `us-east-2`, e.g `s3-udacity-terraform-us-east-2`
 - click next until created.
-- Update `_config.tf` in the `zone1` folder with your S3 bucket name where you will replace `<your_name>` with your name
+- Update `_config.tf` in the `zone1` folder with your S3 bucket name, e.g `s3-udacity-terraform-us-east-2` 
 - **NOTE**: S3 bucket names MUST be globally unique!
 
 #### 4. Create S3 buckets for zone 2 (us-west-1)
-Change your region to `us-west-1`. From the AWS console create an S3 bucket in `us-west-1` called `udacity-tf-<your_name>-west` e.g `udacity-tf-tscotto`
+Change your region to `us-west-1`. 
+From the AWS console create an S3 bucket in `us-west-1`, e.g `s3-udacity-terraform-us-west-1`
 - click next until created.
-- Update `_config.tf` in the `zone2` folder with your S3 bucket name where you will replace `<your_name>` with your name
+- Update `_config.tf` in the `zone2` folder with your S3 bucket name, e.g `s3-udacity-terraform-us-west-1`
 - **NOTE**: S3 bucket names MUST be globally unique!
 
 #### 5. Create a private key pair for your EC2 instances
 - Do this in **BOTH** `us-east-2` and `us-west-1`
 - Name the key `udacity`
 
-#### 6. Cloudshell setup 
+#### 6. Cloudshell setup (or local machine setup)
 Setup your CloudShell. Open CloudShell in the `us-east-2` region. Install the following:
 - helm
     - `export VERIFY_CHECKSUM=false`
@@ -96,7 +100,7 @@ Setup your CloudShell. Open CloudShell in the `us-east-2` region. Install the fo
 Running it again AND performing the step below (No. 8) should clear up those errors.
 
 #### 8. Setup Kubernetes config so you can ping the EKS cluster
-- Delete `~/.kube/config` file, otherwise we will see 
+- Delete `~/.kube/config` file locally, otherwise we will see 
   - `Tried to insert into contexts,which is a <class 'NoneType'> not a <class 'list'>`  
 - Command `aws eks --region us-east-2 update-kubeconfig --name udacity-cluster`
 - Get the <cluster_name> from command above, use it next
@@ -128,13 +132,21 @@ Running it again AND performing the step below (No. 8) should clear up those err
     sudo systemctl restart nginx
     ``` -->
 
-#### 9. Copy the public IP address of your Ubuntu-Web EC2 instance 
-Login to the AWS console and copy the public IP address of your Ubuntu-Web EC2 instance. Ensure you are in the us-east-2 region.
+#### 9. Config Prometheus with IP from Ubuntu-Web EC2 instance
 
-#### 10. Set public IP of your Ubuntu Web for Prometheus
+- **Copy the public IP address of your Ubuntu-Web EC2 instance.** 
+Login to the AWS console and copy the public IP address of your Ubuntu-Web EC2 instance. 
+- Ensure you are in the us-east-2 region.
+
+- **Set public IP of your Ubuntu Web for Prometheus.**
 Edit the `prometheus-additional.yaml` file and replace the `<public_ip>` entries with the public IP of your Ubuntu Web. Save the file.
 
-#### 11. Install Prometheus and Grafana
+#### 10. Transfer `prometheus-additional.yaml` to Cloudshell (via Git)
+- git commit (locally, after setting the IP in the previous step)
+- git push origin master (updates the prometheus-additional.yaml file with actual IP)
+- git pull (from cloudshell, in order to run commands from there with updated IP)
+
+#### 11. Install Prometheus and Grafana (via Cloudshell)
 Change directories to your project directory `cd ../..` and run:
 - `kubectl create secret generic additional-scrape-configs --from-file=prometheus-additional.yaml --namespace monitoring`
 - `helm repo add prometheus-community https://prometheus-community.github.io/helm-charts`
@@ -154,16 +166,18 @@ Login to Grafana with `admin` for the username and `prom-operator` for the passw
 
 #### 12. Install Postman from [here](https://www.postman.com/downloads/). See additional instructions for [importing the collection, and enviroment files](https://learning.postman.com/docs/getting-started/importing-and-exporting-data/#importing-postman-data)
 
-#### 13. Open Postman and load the files `SRE-Project-postman-collection.json` and `SRE-Project.postman_environment.json`
-    1. At the top level of the project in Postman, create the `public-ip`, `email` and `token` variable in the Postman file with the public IP you gathered from above and click Save. You can choose whatever you like for the email and see the next step for the token.
+#### 13. Setup Postman (for interacting with web api) 
+Open Postman and load the files `SRE-Project-postman-collection.json` and `SRE-Project.postman_environment.json`
 
-    2. Run the `Initialize the Database` and `Register a User` tasks in Postman by clicking the "Send" button on top. In the register tasks, you will output a token. Use this token to create a token variable.
+1. At the top level of the project in Postman, create the `public-ip`, `email` and `token` variable in the Postman file with the public IP you gathered from above and click Save. You can choose whatever you like for the email and see the next step for the token.
 
-    4. Run `Create Event` for 100 iterations by clicking the top level `SRE Project` folder in the left-hand side and select just `Create Event` and click the Run icon in the toolbar.
+2. Run the `Initialize the Database` and `Register a User` tasks in Postman by clicking the "Send" button on top. In the register tasks, you will output a token. Use this token to create a token variable (under "Auth").
 
-    5. Run `Get all events` for 100 iterations by clicking the top level `SRE Project` folder in the left-hand side and select just `Get All Events` and click the Run icon in the toolbar.
+3. Run `Create Event` for 100 iterations by clicking the top level `SRE Project` folder in the left-hand side and select just `Create Event` and click the Run icon in the toolbar.
 
-    <!-- 2. Run the Postman runners to generate some traffic. Use 100 iterations -->
+4. Run `Get all events` for 100 iterations by clicking the top level `SRE Project` folder in the left-hand side and select just `Get All Events` and click the Run icon in the toolbar.
+
+   <!-- 2. Run the Postman runners to generate some traffic. Use 100 iterations -->
 
 
 
