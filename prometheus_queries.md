@@ -1,7 +1,7 @@
 ## Availability SLI
 ### The percentage of successful requests over the last 5m
 ````
-sum (rate(apiserver_request_total{job="apiserver",code!~"5.."}[50]))
+sum (rate(apiserver_request_total{job="apiserver",code!~"5.."}[5m]))
 /
 sum (rate(apiserver_request_total{job="apiserver"}[5m]))
 ````
