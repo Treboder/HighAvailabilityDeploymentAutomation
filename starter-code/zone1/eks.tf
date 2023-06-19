@@ -21,7 +21,7 @@ provider "kubernetes" {
    ec2_sg             = module.project_ec2.ec2_sg
    vpc_id             = module.vpc.vpc_id
    nodes_desired_size = 2 # change the number of nodes here
-   nodes_max_size     = 5
+   nodes_max_size     = 2
    nodes_min_size     = 1
 
    depends_on = [
