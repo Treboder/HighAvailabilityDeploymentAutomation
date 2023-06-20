@@ -38,7 +38,7 @@ resource "aws_rds_cluster" "udacity_cluster" {
   cluster_identifier       = "udacity-db-cluster"
   availability_zones       = ["us-east-2a", "us-east-2b"]
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.cluster_pg.name
-  database_name            = "udacityc2"
+  database_name            = "udacity1" # was "udacityc2" in the starter code before
   master_username          = "udacity"
   master_password          = "MyUdacityPassword"
   vpc_security_group_ids   = [aws_security_group.db_sg_1.id]
