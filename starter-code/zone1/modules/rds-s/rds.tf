@@ -27,9 +27,12 @@ resource "aws_rds_cluster" "udacity_cluster-s" {
   cluster_identifier       = "udacity-db-cluster-s"
   availability_zones       = ["us-west-1a","us-west-1b"]
   db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.cluster_pg-s.name
+
+  # comment out when replication from another source is used
   database_name            = "udacity2"           # Cannot specify database name for cross region replication cluster
   master_username          = "udacity"            # Cannot specify user name for cross region replication cluster
   master_password          = "MyUdacityPassword"  # Cannot specify password for cross region replication cluster
+
   vpc_security_group_ids   = [aws_security_group.db_sg_2.id]
   db_subnet_group_name     = aws_db_subnet_group.udacity_db_subnet_group.name
   engine                   = "aurora-mysql"
@@ -39,9 +42,9 @@ resource "aws_rds_cluster" "udacity_cluster-s" {
   storage_encrypted        = false
   backup_retention_period  = 5
 
-  # replication statements
-#  replication_source_identifier   = var.primary_db_cluster_arn    # output from the module
-#  source_region            = "us-east-2"                          # region of the primary cluster
+  # specify replication from another source
+  # replication_source_identifier   = var.primary_db_cluster_arn    # output from the module
+  # source_region            = "us-east-2"                          # region of the primary cluster
 
   depends_on = [aws_rds_cluster_parameter_group.cluster_pg-s]
 }
