@@ -20,9 +20,9 @@ provider "kubernetes" {
    private_subnet_ids = module.vpc.private_subnet_ids
    ec2_sg             = module.project_ec2.ec2_sg
    vpc_id             = module.vpc.vpc_id
-   nodes_desired_size = 2 # change the number of nodes here
-   nodes_max_size     = 2
-   nodes_min_size     = 1
+   nodes_desired_size = var.eks_nodes_desired_size
+   nodes_max_size     = var.eks_nodes_max_size
+   nodes_min_size     = var.eks_nodes_min_size
 
    depends_on = [
     module.vpc,

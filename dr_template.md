@@ -1,11 +1,11 @@
 # Infrastructure
 
 ## AWS Zones
-HA is achieved with deployments in two zones, namely 
+HA is achieved with deployments in two aws regions, namely: 
 * us-east-2 (primary)
 * us-west-1 (DR)
 
-In addition, the VPC has IPs in multiple availability zones (VPC), for the VMs and for the database.
+In addition, the VPC has IPs in multiple availability zones, for the VMs and for the database.
 
 ## Servers and Clusters
 

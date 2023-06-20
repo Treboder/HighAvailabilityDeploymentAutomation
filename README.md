@@ -5,8 +5,9 @@ You will then use the servers you deployed to create an SLO/SLI dashboard.
 Next, you will modify existing infrastructure templates and deploy a highly-available infrastructure to AWS in multiple zones using Terrafrom. 
 With this you will also deploy a RDS database cluster that has a replica in the alternate zone.
 
-## Guides
+## Guides & Readings
 
+- [Google SRE Book](https://sre.google/sre-book/table-of-contents/)
 - [SLI/SLO article](https://thenewstack.io/sre-fundamentals-differences-between-sli-vs-slo-vs-sla/#:~:text=SLI%20(service-level%20indicators)%3A,and%20performing%20up%20to%20standard)
 - [AWS DR strategies](https://aws.amazon.com/blogs/architecture/disaster-recovery-dr-architecture-on-aws-part-i-strategies-for-recovery-in-the-cloud/)
 
@@ -16,15 +17,13 @@ Clone the appropriate git repo with the starter code.
 There will be 2 folders. Zone1 and zone2. 
 This is where you will run the code from in your AWS Cloudshell terminal.
 
-### Dependencies
+### Dependencies/Tools
 
-```
-- helm
-- Terraform
-- Postman
-- kubectl
-- Prometheus and Grafana
-```
+- [helm](https://helm.sh/docs/intro/install/)
+- [Terraform](https://developer.hashicorp.com/terraform/downloads)
+- [Postman](https://www.postman.com/)
+- [kubectl](https://kubernetes.io/docs/tasks/tools/)1
+- [Prometheus](https://prometheus.io/) and [Grafana](https://grafana.com/)
 
 ### Installation
 
@@ -99,7 +98,7 @@ Setup your CloudShell. Open CloudShell in the `us-east-2` region. Install the fo
 - Clone the starter code from the git repo to a folder CloudShell
 - `cd` into the `zone1` folder
 - `terraform init`
-- `terraform apply`
+- `terraform apply` or `terraform apply -auto-approve`  
 
 **NOTE** The first time you run `terraform apply` you may see errors about the Kubernetes namespace or an RDS error. 
 Running it again AND performing the step below (No. 8) should clear up those errors.
