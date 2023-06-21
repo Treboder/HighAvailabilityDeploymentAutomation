@@ -1,9 +1,11 @@
 # Deploying HA Infrastructure
 
-The first step in this project will be deploying infrastructure that you can run Prometheus and Grafana on. 
-You will then use the servers you deployed to create an SLO/SLI dashboard. 
-Next, you will modify existing infrastructure templates and deploy a highly-available infrastructure to AWS in multiple zones using Terrafrom. 
-With this you will also deploy a RDS database cluster that has a replica in the alternate zone.
+This project is part of Udacitys "Site Reliability Engineer".
+The project demonstrates how to deploy high-available infrastructure to AWS using Terraform.  
+First step in this project is to deploy the infrastructure that you can run Prometheus and Grafana on. 
+Next we use the servers deployed to create an SLO/SLI dashboard. 
+The code deploys a highly-available infrastructure to AWS in multiple zones using Terrafrom. 
+Beside the monitoring stack deployed on AWS EKS, part of this is an RDS database cluster that has a replica in the alternate zone.
 
 ## Open Tasks
 
